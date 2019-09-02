@@ -1,45 +1,44 @@
 const {logger} = require('../helpers/index');
+const {userService} = require('../services/index');
 
-exports.register = async function (req, res) {
+exports.create = async function (req, res) {
     try {
-        logger.info(`requestID ${req.requestId} in register user api`);
-        //TODO Start create user inside dynamoDB
-        return res.Ok();
+        logger.info(`requestID ${req.requestId} in create user api`);
+        //Start create user inside dynamoDB
+        let _user = await userService.create(req.body);
+        return res.Ok(_user);
     } catch (err) {
-        logger.error(`requestID ${req.requestId} error in register api is:`, err)
+        logger.error(`requestID ${req.requestId} error in create api is:`, err)
         return res.InternalServerError();
     }
 }
 
-exports.login = async function (req, res) {
-    try {
-        logger.info(`requestID ${req.requestId} in register user api`);
-        //TODO Start create user inside dynamoDB
-        return res.Ok();
-    } catch (err) {
-        logger.error(`requestID ${req.requestId} error in register api is:`, err)
-        return res.InternalServerError();
-    }
-}
-
-exports.changePassword = async function (req, res) {
-    try {
-        logger.info(`requestID ${req.requestId} in changePassword user api`);
-        //TODO Start update user password 
-        return res.Ok();
-    } catch (err) {
-        logger.error(`requestID ${req.requestId} error in changePassword api is:`, err)
-        return res.InternalServerError();
-    }
-}
 
 exports.get = async function (req, res) {
     try {
         logger.info(`requestID ${req.requestId} in get user api`);
-        //TODO Start get user by id from dynamoDB
-        return res.Ok();
+        // Start get user by id from dynamoDB using hask Key
+        let _user = await userService.getById(req.params.userId)
+        return res.Ok(_user);
     } catch (err) {
         logger.error(`requestID ${req.requestId} error in get api is:`, err)
+        return res.InternalServerError();
+    }
+}
+
+
+exports.update = async function (req, res) {
+    try {
+        logger.info(`requestID ${req.requestId} in update user api`);
+        //Start create user inside dynamoDB
+        let userP = {
+            userId:req.params.userId,
+            ...req.body
+        }
+        let _user = await userService.update(userP);
+        return res.Ok(_user);
+    } catch (err) {
+        logger.error(`requestID ${req.requestId} error in update api is:`, err)
         return res.InternalServerError();
     }
 }

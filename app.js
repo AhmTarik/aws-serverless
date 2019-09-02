@@ -6,6 +6,7 @@ const responseTime = require('response-time');
 const awsServerlessExpressMiddleware = require('aws-serverless-express/middleware');
 const middleware = require('./middleware/http-response');
 const {logger} = require('./helpers/index');
+const router = require('./routes/');
 
 const app = express();
 app.use(morgan('dev'));
@@ -25,6 +26,9 @@ app.use(middleware.response);
 
 //set headre responce
 app.use(middleware.responceHeader);
+
+// use routing
+app.use(router.user);
 
 app.get('/ping', function (req, res) {
     try {
